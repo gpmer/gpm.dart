@@ -14,10 +14,12 @@ import 'dart:convert';
 
 import 'package:log/log.dart';
 import 'package:args/args.dart' show ArgParser;
-import 'package:args/command_runner.dart' show CommandRunner, Command, UsageException;
+import 'package:args/command_runner.dart'
+    show CommandRunner, Command, UsageException;
+import 'package:path/path.dart' as path;
 
 import 'config.dart';
-import 'utils.dart' show readdir;
+import 'utils.dart' show readdir, ensuredir, ensurefile;
 import 'git-url-parse.dart' show gitUrlParse;
 
 var argResults = [];
@@ -25,11 +27,11 @@ var argResults = [];
 Future main(List<String> arguments) async {
   var parser = new ArgParser();
 
-  parser..addFlag('verbose', abbr: 'v')..addFlag('iambic-pentameter', abbr: 'i');
+  parser..addFlag('verbose', abbr: 'v')..addFlag(
+      'iambic-pentameter', abbr: 'i');
 
-  print(parser.usage);
-
-  var runner = new CommandRunner("gpm", "Git Package Manager, make you manage the repository easier.")
+  var runner = new CommandRunner(
+      "gpm", "Git Package Manager, make you manage the repository easier.")
     ..addCommand(new ListCommand())..addCommand(new AddCommand());
 
   argResults = parser.parse(arguments);
@@ -81,20 +83,23 @@ class AddCommand extends Command {
     final repository = argResults.arguments[1];
 
     final gitInfo = gitUrlParse(repository);
-    print(gitInfo);
 
-/*    final Process process = await Process.start('git', ['clone', repository]);
+    await ensuredir(path.join(config["paths"]["root"], gitInfo["resource"]));
+    await ensuredir(path.join(config["paths"]["root"], gitInfo["resource"], gitInfo["owner"]));
+    await ensuredir('./.__temp__');
+
+    final Process process = await Process.start('git', ['clone', repository], workingDirectory: './.__temp__');
 
     process.stdout
-      .transform(UTF8.decoder)
-      .listen((data) {
+        .transform(UTF8.decoder)
+        .listen((data) {
       print(data);
     });
 
     process.stderr
-      .transform(UTF8.decoder)
-      .listen((data) {
+        .transform(UTF8.decoder)
+        .listen((data) {
       print(data);
-    });*/
+    });
   }
 }

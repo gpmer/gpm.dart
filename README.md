@@ -1,12 +1,11 @@
 # gpmx.dart 
 [![Build Status](https://travis-ci.org/axetroy/gpm.svg?branch=master)](https://travis-ci.org/axetroy/gpm)
-[![Dependency](https://david-dm.org/axetroy/gpm.svg)](https://david-dm.org/axetroy/gpm)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Node](https://img.shields.io/badge/node-%3E=6.9-blue.svg?style=flat-square)
+![Node](https://img.shields.io/badge/dart-%3E=1.2.0-blue.svg?style=flat-square)
 
 
 
-Git Package Manager, make you manage the repository easier, write in dart
+Git Package Manager, make you manage the repository easier
 
 ## Features
 
@@ -16,9 +15,8 @@ Git Package Manager, make you manage the repository easier, write in dart
 - [ ] add repository in multi directories
 
 ## Installation
-```bash
-npm install @axetroy/gpmx -g
-```
+
+// TODO
 
 ## Requirement
 
@@ -45,12 +43,14 @@ Global options:
 -h, --help    Print this usage information.
 
 Available commands:
-  add     clone repo into local dir.
-  clean   clean the temp/cache.
-  help    Display help information for gpm.
-  list    display the all repo.
+  add       clone repo into local dir.
+  clean     clean the temp/cache.
+  help      Display help information for gpmx.
+  list      display the all repo.
+  remove    remove a repo.
+  runtime   print the program runtime, useful for submit a issue.
 
-Run "gpm help <command>" for more information about a command.
+Run "gpmx help <command>" for more information about a command.
 
 ```
 
@@ -58,10 +58,9 @@ Run "gpm help <command>" for more information about a command.
 
 this is a default config, it will be generated in ``~/.gpmx`` by default
 
-```javascript
-// ~/.gpmx/gpmx.config.json
+```json
 {
-  "name": "gpmx"
+  "name": "gpmx",
   "base": "gpmx"
 }
 ```
@@ -89,18 +88,15 @@ github.com:
 
 ## Uninstall
 
-```bash
-npm uninstall @axetroy/gpmx -g
-rm -rf ~/.gpmx      # all file, cache, contain in this dir
-```
+// TODO
 
 ## Contribute
 
 ```bash
-git clone https://github.com/axetroy/gpm.git
-cd ./gpm
-yarn
-./bin/gpmx
+git clone https://github.com/axetroy/gpm.dart.git
+cd ./gpm.dart
+pub get
+dart ./bin/gpmx
 ```
 
 You can flow [Contribute Guide](https://github.com/axetroy/gpm/blob/master/contributing.md)

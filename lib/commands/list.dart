@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
@@ -6,7 +5,7 @@ import 'package:log/log.dart';
 import 'package:args/command_runner.dart' show Command;
 
 import '../config.dart' as config;
-import '../utils.dart' show readdir, readJson;
+import '../utils.dart' show readJson;
 
 
 class ListCommand extends Command {
@@ -20,16 +19,19 @@ class ListCommand extends Command {
   }
 
   Future run() async {
-
     final lock = await readJson(config.LOCK);
 
     List repos = new List.from(lock["repos"]);
 
     if (repos.isEmpty) repos = new List();
 
+    if (repos.isEmpty) {
+      return Log.message('You did not add any repository yet, try run command line: ${config.NAME} add <repo> [options]');
+    }
+
     var output = new Map();
 
-    while (repos.length != 0) {
+    while (repos.isNotEmpty) {
       Map repo = repos.removeLast();
       String source = repo["source"];
       String owner = repo["owner"];
@@ -44,7 +46,5 @@ class ListCommand extends Command {
     }
 
     print(new JsonEncoder.withIndent('  ').convert(output));
-
-    Log.message('run list command');
   }
 }

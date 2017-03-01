@@ -48,8 +48,10 @@ Future<File> ensurefile(String fileStr) async {
   return file;
 }
 
-Future<Object> removeDir(String file) async {
-
+Future<Directory> removedir(String dirStr) async {
+  final dir = await ensuredir(dirStr);
+  await dir.delete(recursive: true);
+  return dir;
 }
 
 Future<Directory> createTemp(String dirStr) async {

@@ -11,7 +11,7 @@ Map<String, dynamic> gitUrlParse(String url) {
   List<String> sourceParts = urlInfo["resource"].split(".");
   List<String> splits = null;
 
-//  urlInfo["toString"] = (type) {
+//  urlInfo["toString"-] = (type) {
 //    return stringify(urlInfo, type);
 //  };
 
@@ -90,8 +90,4 @@ String buildToken(Map<String, dynamic> obj) {
     default:
       return '${obj["token"]}@';
   }
-}
-
-void main() {
-  gitUrlParse("https://github.com/axetroy/gpm.git");
 }

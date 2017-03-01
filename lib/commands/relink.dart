@@ -43,8 +43,6 @@ class RelinkCommand extends Command {
 
             gitInfo["path"] = project.path;
 
-            print(gitInfo);
-
             repos.add(gitInfo);
             lock["repos"] = repos.toList();
             await writeJson(config.LOCK, lock);

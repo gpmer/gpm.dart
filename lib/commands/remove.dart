@@ -10,7 +10,7 @@ import '../utils.dart' show readJson, removedir, writeJson;
 
 class RemoveCommand extends Command {
   final name = "remove";
-  final abbr = 'rm';
+  final aliases = ['rm'];
   final description = "remove a repo.";
   var argv = null;
 
@@ -31,9 +31,9 @@ class RemoveCommand extends Command {
     Log.message('You can Press [CTRL+C] to cancle this action.');
 
     final answer = await prompt.ask(
-      new Question(
-        'Switch one you want to remove, Enter the flowing Index', defaultsTo: allowed.first, allowed: allowed
-      )
+        new Question(
+            'Switch one you want to remove, Enter the flowing Index', defaultsTo: allowed.first, allowed: allowed
+        )
     );
 
     close();
@@ -43,14 +43,16 @@ class RemoveCommand extends Command {
       if (repo["path"] == answer) target = repo;
     });
 
-    repos.remove(target);
+    print(target);
 
-    lock["repos"] = repos.toList();
-
-    await writeJson(config.LOCK, lock);
-
-    await removedir(target["path"]);
-
-    Log.message('${target["path"]} has been remove');
+//    repos.remove(target);
+//
+//    lock["repos"] = repos.toList();
+//
+//    await writeJson(config.LOCK, lock);
+//
+//    await removedir(target["path"]);
+//
+//    Log.message('${target["path"]} has been remove');
   }
 }

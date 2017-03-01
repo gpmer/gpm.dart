@@ -6,7 +6,7 @@ import 'package:args/command_runner.dart' show Command;
 
 class RuntimeCommand extends Command {
   final name = "runtime";
-  final abbr = 'rt';
+  final aliases = ['rt'];
   final description = "print the program runtime, useful for submit a issue.";
   var argv = null;
 

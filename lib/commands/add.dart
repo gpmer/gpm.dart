@@ -13,7 +13,7 @@ import '../git-url-parse/git-url-parse.dart' show gitUrlParse;
 
 class AddCommand extends Command {
   final name = "add";
-  final abbr = 'a';
+  final aliases = ['a'];
   final description = "clone repo into local dir.";
   var argv = null;
 

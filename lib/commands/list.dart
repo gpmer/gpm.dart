@@ -11,7 +11,7 @@ import '../utils.dart' show readdir, readJson;
 
 class ListCommand extends Command {
   final name = "list";
-  final abbr = 'ls';
+  final aliases = ['ls'];
   final description = "display the all repo.";
   var argv = null;
 

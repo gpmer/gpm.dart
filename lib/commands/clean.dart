@@ -8,7 +8,7 @@ import '../config.dart' as config;
 
 class CleanCommand extends Command {
   final name = "clean";
-  final abbr = 'c';
+  final aliases = ['cl'];
   final description = "clean the temp/cache.";
   var argv = null;
 

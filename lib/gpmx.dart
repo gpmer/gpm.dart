@@ -1,4 +1,4 @@
-library gpm;
+library gpmx;
 
 import 'dart:io';
 import 'dart:async';

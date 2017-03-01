@@ -1,7 +1,7 @@
 name: gpmx
 author: axetroy <troy450409405@gmail.com>
 description: Git Package Manager, make you manage the repository easier, Power by Dart
-homepage: https://github.com/axetroy/gpm.dart
+homepage: https://github.com/gpmer/gpm.dart
 version: 0.1.0
 dependencies:
   log: ">=0.0.6 <1.0.0"

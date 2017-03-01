@@ -2,14 +2,16 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:path/path.dart' as path;
+
 Future<List<FileSystemEntity>> readdir(String dirStr) {
   final dir = new Directory(dirStr);
   var files = <FileSystemEntity>[];
   var completer = new Completer();
   var lister = dir.list(recursive: false);
   lister.listen((file) => files.add(file),
-    // should also register onError
-    onDone: () => completer.complete(files)
+      // should also register onError
+      onDone: () => completer.complete(files)
   );
   return completer.future;
 }
@@ -18,10 +20,10 @@ Future<Directory> ensuredir(String dirStr) async {
   var isExistComplete = new Completer();
   Directory dir = new Directory(dirStr);
   dir.exists()
-    .then((isExist) {
+      .then((isExist) {
     isExistComplete.complete(isExist);
   })
-    .catchError(() {
+      .catchError(() {
     isExistComplete.complete(false);
   });
 
@@ -35,10 +37,10 @@ Future<File> ensurefile(String fileStr) async {
   var isExistComplete = new Completer();
   File file = new File(fileStr);
   file.exists()
-    .then((isExist) {
+      .then((isExist) {
     isExistComplete.complete(isExist);
   })
-    .catchError(() {
+      .catchError(() {
     isExistComplete.complete(false);
   });
 
@@ -73,4 +75,17 @@ Future<Object> readJson(String file) async {
 Future<File> writeJson(String file, Object object) async {
   File jsonFile = await ensurefile(file);
   return jsonFile.writeAsString(new JsonEncoder.withIndent('  ').convert(object));
+}
+
+Future isExistDir(String dirStr) async {
+  var isExistComplete = new Completer();
+  Directory dir = new Directory(dirStr);
+  dir.exists()
+      .then((isExist) => isExistComplete.complete(isExist))
+      .catchError(() => isExistComplete.complete(false));
+  return await isExistComplete.future;
+}
+
+Future isGitRepoDir(String dirStr) async {
+  return await isExistDir(path.join(dirStr, '.git'));
 }

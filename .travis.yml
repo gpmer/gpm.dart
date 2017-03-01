@@ -1,0 +1,20 @@
+language: node_js
+sudo: false
+
+os:
+  - linux
+  - osx
+
+node_js:
+  - '6.9.5'
+
+cache:
+  yarn: true
+  directories
+    - ./node_modules
+
+before_script:
+  - npm install -g yarn
+
+script:
+  - echo "test success!"

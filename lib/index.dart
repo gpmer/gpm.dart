@@ -21,7 +21,7 @@ Future main(List<String> arguments) async {
   parser..addFlag('verbose', abbr: 'v')..addFlag(
     'iambic-pentameter', abbr: 'i');
 
-  var runner = new CommandRunner("gpm", "Git Package Manager, make you manage the repository easier.")
+  var runner = new CommandRunner("gpmx", "Git Package Manager, make you manage the repository easier.")
     ..addCommand(new ListCommand(argv))..addCommand(new AddCommand(argv))..addCommand(new CleanCommand(argv));
 
   await prepare();

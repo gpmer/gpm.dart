@@ -12,6 +12,7 @@ import 'prepare.dart' show prepare;
 import './commands/add.dart' show AddCommand;
 import './commands/list.dart' show ListCommand;
 import './commands/clean.dart' show CleanCommand;
+import './commands/runtime.dart' show RuntimeCommand;
 
 
 Future bootstrap(List<String> arguments) async {
@@ -22,7 +23,8 @@ Future bootstrap(List<String> arguments) async {
     'iambic-pentameter', abbr: 'i');
 
   var runner = new CommandRunner("gpmx", "Git Package Manager, make you manage the repository easier.")
-    ..addCommand(new ListCommand(argv))..addCommand(new AddCommand(argv))..addCommand(new CleanCommand(argv));
+    ..addCommand(new ListCommand(argv))..addCommand(new AddCommand(argv))..addCommand(
+      new CleanCommand(argv))..addCommand(new RuntimeCommand(argv));
 
   await prepare();
 

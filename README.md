@@ -22,9 +22,7 @@ npm install @axetroy/gpmx -g
 
 ## Requirement
 
-- nodejs>=6.9
-- npm || yarn
-- Git
+- dart
 
 ## Supports
 

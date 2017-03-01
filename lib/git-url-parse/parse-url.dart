@@ -83,8 +83,3 @@ Map<String, dynamic> parseUrl(String url) {
     "href": href
   };
 }
-
-void main() {
-  print(parseUrl('https://api.dartlang.org/stable/1.22.1/dart-core/num-class.html?q=333'));
-  print(parseUrl('https://github.com/axetroy/gpm.git'));
-}

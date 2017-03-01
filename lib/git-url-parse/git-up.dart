@@ -4,6 +4,7 @@ import 'parse-url.dart';
 import 'is-ssh.dart';
 
 Map<String, dynamic> gitUp(String input) {
+
   var output = parseUrl(input);
   output["token"] = "";
 

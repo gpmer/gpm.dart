@@ -4,7 +4,7 @@ import 'git-up.dart' show gitUp;
 
 Map<String, dynamic> gitUrlParse(String url) {
   if (url is! String) {
-    throw new Error();
+    throw new TypeError();
   }
 
   var urlInfo = gitUp(url);

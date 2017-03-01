@@ -20,7 +20,6 @@ class ListCommand extends Command {
   }
 
   Future run() async {
-    var list = {};
 
     final lock = await readJson(config.LOCK);
 
@@ -28,28 +27,21 @@ class ListCommand extends Command {
 
     if (repos.isEmpty) repos = new List();
 
-    var output = {};
+    var output = new Map();
 
-    repos.forEach((Map repo) {
-      var source = repo["source"];
-      var owner = repo["owner"];
-      var name = repo["name"];
-      var path = repo["path"];
-      if (!output[source]) output[source] = {};
-      if (!output[source][owner]) output[source][owner] = {};
-      output[source][owner][name] = path;
-    });
+    while (repos.length != 0) {
+      Map repo = repos.removeLast();
+      String source = repo["source"];
+      String owner = repo["owner"];
+      String name = repo["name"];
+      String path = repo["path"];
+      Map<String, dynamic> sourceMap = output.containsKey(source) ? output[source] : new Map();
+      Map<String, dynamic> ownerMap = sourceMap.containsKey(owner) ? sourceMap[owner] : new Map();
+      ownerMap[name] = path;
+      sourceMap[owner] = ownerMap;
 
-//    (await readdir(config.ROOT)).forEach((FileSystemEntity source) async {
-//      if (!list[source]) list[source] = {};
-//      (await readdir(source.path)).forEach((FileSystemEntity owner) async {
-//        if (!list[source][owner]) list[source][owner] = {};
-//        (await readdir(owner.path)).forEach((FileSystemEntity project) {
-//          print(project.path);
-//          list[source][owner][project] = project;
-//        });
-//      });
-//    });
+      output[source] = sourceMap;
+    }
 
     print(new JsonEncoder.withIndent('  ').convert(output));
 

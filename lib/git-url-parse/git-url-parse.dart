@@ -8,15 +8,17 @@ Map<String, dynamic> gitUrlParse(String url) {
   }
 
   var urlInfo = gitUp(url);
+  urlInfo["href"] = url;
+
   List<String> sourceParts = urlInfo["resource"].split(".");
   List<String> splits = null;
 
-//  urlInfo["toString"-] = (type) {
+//  urlInfo["toString"] = (type) {
 //    return stringify(urlInfo, type);
 //  };
 
   urlInfo["source"] = sourceParts.length > 2
-    ? sourceParts.getRange(-2, 0).join(".")
+    ? sourceParts.getRange(sourceParts.length-2, sourceParts.length).join(".")
     : urlInfo["source"] = urlInfo["resource"];
 
   urlInfo["name"] = urlInfo["pathname"].substring(1).replaceAll(new RegExp(r"\.git$"), "");

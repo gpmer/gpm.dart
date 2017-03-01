@@ -18,12 +18,9 @@ class ListCommand extends Command {
     argv = __argv;
   }
 
-  CommitCommand() {
-    argParser.addFlag('all', abbr: 'a');
-  }
-
   Future run() async {
     var list = {};
+
     (await readdir(config.ROOT)).forEach((FileSystemEntity source) async {
       if (!list[source]) list[source] = {};
       (await readdir(source.path)).forEach((FileSystemEntity owner) async {

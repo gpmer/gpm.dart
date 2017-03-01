@@ -20,10 +20,6 @@ class AddCommand extends Command {
     argv = __argv;
   }
 
-  CommitCommand() {
-    argParser.addFlag('force', abbr: 'f');
-  }
-
   Future run() async {
     final repository = argv.arguments[1];
 

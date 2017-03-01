@@ -48,6 +48,11 @@ Future<File> ensurefile(String fileStr) async {
   return file;
 }
 
+Future<Object> removeDir(file) async {
+//  Directory new Directory(file);
+//  return output;
+}
+
 Future<Directory> createTemp(String dirStr) async {
   Directory dir = new Directory(dirStr);
   return await dir.createTemp('gpm-');

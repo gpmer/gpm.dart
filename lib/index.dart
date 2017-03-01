@@ -11,6 +11,7 @@ import 'prepare.dart' show prepare;
 // commands
 import './commands/add.dart' show AddCommand;
 import './commands/list.dart' show ListCommand;
+import './commands/clean.dart' show CleanCommand;
 
 
 Future main(List<String> arguments) async {
@@ -21,7 +22,7 @@ Future main(List<String> arguments) async {
     'iambic-pentameter', abbr: 'i');
 
   var runner = new CommandRunner("gpm", "Git Package Manager, make you manage the repository easier.")
-    ..addCommand(new ListCommand(argv))..addCommand(new AddCommand(argv));
+    ..addCommand(new ListCommand(argv))..addCommand(new AddCommand(argv))..addCommand(new CleanCommand(argv));
 
   await prepare();
 

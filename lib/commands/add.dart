@@ -4,9 +4,10 @@ import 'dart:convert';
 
 import 'package:args/command_runner.dart' show Command;
 import 'package:path/path.dart' as path;
+import 'package:log/log.dart';
 
 import '../config.dart' as config;
-import '../utils.dart' show ensuredir, createTemp;
+import '../utils.dart' show ensuredir, createTemp, readJson, writeJson;
 import '../git-url-parse/git-url-parse.dart' show gitUrlParse;
 
 
@@ -71,13 +72,24 @@ class AddCommand extends Command {
       await new Directory(path.normalize(
         path.join(temp.absolute.path, gitInfo["name"]))
       ).rename(targetPath);
+
+      Log.success('clone in $targetDir');
+
+      var lock = await readJson(config.LOCK);
+
+      Set repos = new Set.from(lock["repos"] ? lock["repos"] : []);
+
+      gitInfo["path"] = targetPath;
+      repos.add(gitInfo);
+
+      lock["repos"] = repos.toList(growable: true);
+
+      await writeJson(config.LOCK, lock);
     } catch (exception, stackTrace) {
       print(exception);
       print(stackTrace);
     } finally {
       await temp.delete(recursive: true);
     }
-
-    print('exit code: $exitCode');
   }
 }

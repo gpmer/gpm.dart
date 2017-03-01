@@ -11,9 +11,9 @@ Map<String, dynamic> gitUrlParse(String url) {
   List<String> sourceParts = urlInfo["resource"].split(".");
   List<String> splits = null;
 
-  urlInfo["toString"] = (type) {
-    return stringify(urlInfo, type);
-  };
+//  urlInfo["toString"] = (type) {
+//    return stringify(urlInfo, type);
+//  };
 
   urlInfo["source"] = sourceParts.length > 2
     ? sourceParts.getRange(-2, 0).join(".")

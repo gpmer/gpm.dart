@@ -14,7 +14,7 @@ import './commands/list.dart' show ListCommand;
 import './commands/clean.dart' show CleanCommand;
 
 
-Future main(List<String> arguments) async {
+Future bootstrap(List<String> arguments) async {
   final parser = new ArgParser();
   final argv = parser.parse(arguments);
 
@@ -32,4 +32,3 @@ Future main(List<String> arguments) async {
     exit(64);
   });
 }
-

@@ -48,9 +48,8 @@ Future<File> ensurefile(String fileStr) async {
   return file;
 }
 
-Future<Object> removeDir(file) async {
-//  Directory new Directory(file);
-//  return output;
+Future<Object> removeDir(String file) async {
+
 }
 
 Future<Directory> createTemp(String dirStr) async {
@@ -58,7 +57,7 @@ Future<Directory> createTemp(String dirStr) async {
   return await dir.createTemp('gpm-');
 }
 
-Future<Object> readJson(file) async {
+Future<Object> readJson(String file) async {
   String contents = await new File(file).readAsString();
   Object output = {};
   try {
@@ -69,7 +68,7 @@ Future<Object> readJson(file) async {
   return output;
 }
 
-Future<File> writeJson(file, Object object) async {
+Future<File> writeJson(String file, Object object) async {
   File jsonFile = await ensurefile(file);
-  return jsonFile.writeAsString(new JsonEncoder().convert(object));
+  return jsonFile.writeAsString(new JsonEncoder.withIndent('  ').convert(object));
 }

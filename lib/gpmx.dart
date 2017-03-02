@@ -3,7 +3,7 @@ library gpmx;
 import 'dart:io';
 import 'dart:async';
 
-import 'package:args/args.dart' show ArgParser;
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart' show CommandRunner, UsageException;
 
 import 'prepare.dart' show prepare;
@@ -15,23 +15,25 @@ import './commands/clean.dart' show CleanCommand;
 import './commands/runtime.dart' show RuntimeCommand;
 import './commands/remove.dart' show RemoveCommand;
 import './commands/relink.dart' show RelinkCommand;
+import './commands/import.dart' show ImportCommand;
 
 
 Future bootstrap(List<String> arguments) async {
-  final parser = new ArgParser();
-  final argv = parser.parse(arguments);
+  final ArgParser parser = new ArgParser();
+  final ArgResults argv = parser.parse(arguments);
 
   parser.addFlag('verbose', abbr: 'v');
   parser.addFlag('help', abbr: 'i');
 
   final program = new CommandRunner("gpmx", "Git Package Manager, make you manage the repository easier.");
 
-  program.addCommand(new ListCommand(argv));
-  program.addCommand(new AddCommand(argv));
-  program.addCommand(new CleanCommand(argv));
-  program.addCommand(new RuntimeCommand(argv));
-  program.addCommand(new RemoveCommand(argv));
-  program.addCommand(new RelinkCommand(argv));
+  program.addCommand(new ListCommand(arguments));
+  program.addCommand(new AddCommand(arguments));
+  program.addCommand(new CleanCommand(arguments));
+  program.addCommand(new RuntimeCommand(arguments));
+  program.addCommand(new RemoveCommand(arguments));
+  program.addCommand(new RelinkCommand(arguments));
+  program.addCommand(new ImportCommand(arguments: arguments, parser: parser));
 
   await prepare();
 

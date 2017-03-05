@@ -1,4 +1,4 @@
-library gpm;
+library gpmx;
 
 import 'dart:io';
 import 'dart:async';
@@ -16,6 +16,7 @@ import './commands/clean.dart' show CleanCommand;
 import './commands/runtime.dart' show RuntimeCommand;
 import './commands/remove.dart' show RemoveCommand;
 import './commands/relink.dart' show RelinkCommand;
+import './commands/import.dart' show ImportCommand;
 
 Future bootstrap(List<String> arguments) async {
   program

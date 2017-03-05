@@ -47,6 +47,7 @@ Available commands:
   clean     clean the temp/cache.
   help      Display help information for gpmx.
   list      display the all repo.
+  relink    relink the base dir which contain repositories if you delete repository manually.
   remove    remove a repo.
   runtime   print the program runtime, useful for submit a issue.
 

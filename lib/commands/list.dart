@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
@@ -6,7 +5,7 @@ import 'package:log/log.dart';
 import 'package:args/command_runner.dart' show Command;
 
 import '../config.dart' as config;
-import '../utils.dart' show readdir, readJson;
+import '../utils.dart' show readJson;
 
 
 class ListCommand extends Command {
@@ -20,39 +19,32 @@ class ListCommand extends Command {
   }
 
   Future run() async {
-    var list = {};
-
     final lock = await readJson(config.LOCK);
 
     List repos = new List.from(lock["repos"]);
 
     if (repos.isEmpty) repos = new List();
 
-    var output = {};
+    if (repos.isEmpty) {
+      return Log.message('You did not add any repository yet, try run command line: ${config.NAME} add <repo> [options]');
+    }
 
-    repos.forEach((Map repo) {
-      var source = repo["source"];
-      var owner = repo["owner"];
-      var name = repo["name"];
-      var path = repo["path"];
-      if (!output[source]) output[source] = {};
-      if (!output[source][owner]) output[source][owner] = {};
-      output[source][owner][name] = path;
-    });
+    var output = new Map();
 
-//    (await readdir(config.ROOT)).forEach((FileSystemEntity source) async {
-//      if (!list[source]) list[source] = {};
-//      (await readdir(source.path)).forEach((FileSystemEntity owner) async {
-//        if (!list[source][owner]) list[source][owner] = {};
-//        (await readdir(owner.path)).forEach((FileSystemEntity project) {
-//          print(project.path);
-//          list[source][owner][project] = project;
-//        });
-//      });
-//    });
+    while (repos.isNotEmpty) {
+      Map repo = repos.removeLast();
+      String source = repo["source"];
+      String owner = repo["owner"];
+      String name = repo["name"];
+      String path = repo["path"];
+      Map<String, dynamic> sourceMap = output.containsKey(source) ? output[source] : new Map();
+      Map<String, dynamic> ownerMap = sourceMap.containsKey(owner) ? sourceMap[owner] : new Map();
+      ownerMap[name] = path;
+      sourceMap[owner] = ownerMap;
+
+      output[source] = sourceMap;
+    }
 
     print(new JsonEncoder.withIndent('  ').convert(output));
-
-    Log.message('run list command');
   }
 }

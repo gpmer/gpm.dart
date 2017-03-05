@@ -1,11 +1,15 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:path/path.dart' as path;
 import 'package:log/log.dart';
 import 'package:args/command_runner.dart' show Command;
 
 import '../config.dart' as config;
-import '../utils.dart' show readdir, isGitRepoDir;
+import '../utils.dart' show readdir, isGitRepoDir, readJson, writeJson;
+import '../git-dir-config.dart' show gitDirParse;
+import '../git-url-parse/git-url-parse.dart' show gitUrlParse;
 
 class RelinkCommand extends Command {
   final name = "relink";
@@ -20,18 +24,34 @@ class RelinkCommand extends Command {
   Future run() async {
     final List<Directory> sources = await readdir(config.ROOT);
 
-    var repos = [];
+    var lock = await readJson(config.LOCK);
 
-    sources.forEach((source) async {
+    var repos = new Set();
+
+    while (sources.length != 0) {
+      final source = sources.removeLast();
       final List<Directory> owners = await readdir(source.path);
-      owners.forEach((owner) async {
+      while (owners.length != 0) {
+        final owner = owners.removeLast();
         final List<Directory> projects = await readdir(owner.path);
-        projects.forEach((project) {
-          repos.add(project.path);
-          print(project.path);
-        });
-      });
-    });
+        while (projects.length != 0) {
+          final project = projects.removeLast();
+          if (await isGitRepoDir(project.path)) {
+            final String gitUrl = await gitDirParse(path.join(project.path, '.git'));
+
+            final Map<String, dynamic> gitInfo = gitUrlParse(gitUrl);
+
+            gitInfo["path"] = project.path;
+
+            repos.add(gitInfo);
+            lock["repos"] = repos.toList();
+            await writeJson(config.LOCK, lock);
+
+            Log.message('${gitUrl} link to ${project.path}');
+          }
+        }
+      }
+    }
 
     Log.message('relink success');
   }

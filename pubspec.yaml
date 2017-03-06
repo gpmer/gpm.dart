@@ -5,8 +5,9 @@ homepage: https://github.com/gpmer/gpm.dart
 version: 0.1.0
 dependencies:
   log: ">=0.0.6 <1.0.0"
-  args: ">=0.13.7 <1.0.0"
   path: ">=1.4.1 <2.0.0"
   prompt: ">=0.1.7 <0.2.0"
   escli:
     git: git://github.com/axetroy/commander.dart.git
+  git_url_parse:
+    git: git://github.com/axetroy/git-url-parse.git

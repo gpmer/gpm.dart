@@ -3,56 +3,42 @@ import 'dart:async';
 
 import 'package:log/log.dart';
 import 'package:prompt/prompt.dart';
-import 'package:args/command_runner.dart' show Command;
 
 import '../config.dart' as config;
 import '../utils.dart' show readJson, removedir, writeJson;
 
-class RemoveCommand extends Command {
-  final name = "remove";
-  final aliases = ['rm'];
-  final description = "remove a repo.";
-  var argv = null;
+Future removeHandler(Map argv, Map options) async {
+  final lock = await readJson(config.LOCK);
 
-  RemoveCommand(__argv) {
-    argv = __argv;
-  }
+  Set repositories = new Set.from(lock["repos"]);
+  if (repositories.isEmpty) repositories = new Set();
 
-  Future run() async {
-    final lock = await readJson(config.LOCK);
+  final allowed = repositories.map((repo) {
+    return repo["path"];
+  }).toList();
 
-    Set repos = new Set.from(lock["repos"]);
-    if (repos.isEmpty) repos = new Set();
+  Log.message('You can Press [CTRL+C] to cancle this action.');
 
-    final allowed = repos.map((repo) {
-      return repo["path"];
-    }).toList();
+  final answer = await prompt.ask(
+    new Question(
+      'whitch one you wanna remove, Enter the flowing Index or CTRL+C to cancel', defaultsTo: allowed.first, allowed: allowed
+    )
+  );
 
-    Log.message('You can Press [CTRL+C] to cancle this action.');
+  close();
 
-    final answer = await prompt.ask(
-        new Question(
-            'Switch one you want to remove, Enter the flowing Index', defaultsTo: allowed.first, allowed: allowed
-        )
-    );
+  Map target;
+  repositories.forEach((repo) {
+    if (repo["path"] == answer) target = repo;
+  });
 
-    close();
+  repositories.remove(target);
 
-    var target = null;
-    repos.forEach((repo) {
-      if (repo["path"] == answer) target = repo;
-    });
+  lock["repos"] = repositories.toList();
 
-    print(target);
+  await writeJson(config.LOCK, lock);
 
-//    repos.remove(target);
-//
-//    lock["repos"] = repos.toList();
-//
-//    await writeJson(config.LOCK, lock);
-//
-//    await removedir(target["path"]);
-//
-//    Log.message('${target["path"]} has been remove');
-  }
+  await removedir(target["path"]);
+
+  Log.message('${target["path"]} has been remove');
 }

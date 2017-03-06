@@ -5,7 +5,6 @@ import 'package:path/path.dart' as path;
 
 Future gitDirParse(String dir) async {
   final String configRaw = await new File(path.join(dir, 'config')).readAsString();
-  final List<String> configList = configRaw.split(new RegExp(r'\n'));
 
   final Iterable<Match> matcher = new RegExp(r'url\s?=\s?[^\n]+').allMatches(configRaw);
 

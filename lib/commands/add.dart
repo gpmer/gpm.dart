@@ -2,94 +2,82 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:args/command_runner.dart' show Command;
 import 'package:path/path.dart' as path;
 import 'package:log/log.dart';
 
-import '../config.dart' as config;
-import '../utils.dart' show ensuredir, createTemp, readJson, writeJson;
-import '../git-url-parse/git-url-parse.dart' show gitUrlParse;
+import 'package:gpmx/config.dart' as config;
+import 'package:gpmx/utils.dart' show ensuredir, createTemp, readJson, writeJson;
+import 'package:git_url_parse/git-url-parse.dart' show gitUrlParse;
 
 
-class AddCommand extends Command {
-  final name = "add";
-  final aliases = ['a'];
-  final description = "clone repo into local dir.";
-  var argv = null;
+Future addHandler(Map argv, Map options) async {
+  final repository = argv["repo"];
 
-  AddCommand(__argv) {
-    argv = __argv;
+  final gitInfo = gitUrlParse(repository);
+
+  final Directory temp = await createTemp(config.TEMP);
+
+  final Process process = await Process.start('git', ['clone', repository], workingDirectory: temp.path);
+
+  process.stdout
+    .transform(UTF8.decoder)
+    .listen((data) {
+    print(data);
+  });
+
+  process.stderr
+    .transform(UTF8.decoder)
+    .listen((data) {
+    print(data);
+  });
+
+  final num exitCode = await process.exitCode;
+
+  if (exitCode != 0) {
+    await temp.delete(recursive: true);
+    return throw new StackOverflowError();
   }
 
-  Future run() async {
-    final repository = argv.arguments[1];
+  try {
+    await ensuredir(
+      path.join(
+        config.ROOT,
+        gitInfo["source"]
+      )
+    );
+    final Directory ownerdir = await ensuredir(
+      path.join(
+        config.ROOT,
+        gitInfo["source"], gitInfo["owner"]
+      )
+    );
 
-    final gitInfo = gitUrlParse(repository);
+    final String targetPath = path.join(ownerdir.path, gitInfo["name"]);
 
-    final Directory temp = await createTemp(config.TEMP);
+    Directory targetDir = await ensuredir(targetPath);
 
-    final Process process = await Process.start('git', ['clone', repository], workingDirectory: temp.path);
+    await targetDir.delete(recursive: true);
 
-    process.stdout
-      .transform(UTF8.decoder)
-      .listen((data) {
-      print(data);
-    });
+    await new Directory(path.normalize(
+      path.join(temp.absolute.path, gitInfo["name"]))
+    ).rename(targetPath);
 
-    process.stderr
-      .transform(UTF8.decoder)
-      .listen((data) {
-      print(data);
-    });
+    Log.success('clone in $targetDir');
 
-    final num exitCode = await process.exitCode;
+    var lock = await readJson(config.LOCK);
 
-    if (exitCode != 0) {
-      await temp.delete(recursive: true);
-      return throw new StackOverflowError();
-    }
+    Set repos = new Set.from(lock["repos"] ? lock["repos"] : []);
 
-    try {
-      await ensuredir(
-        path.join(
-          config.ROOT,
-          gitInfo["resource"]
-        )
-      );
-      final Directory ownerdir = await ensuredir(
-        path.join(
-          config.ROOT,
-          gitInfo["resource"], gitInfo["owner"]
-        )
-      );
+    gitInfo["path"] = targetPath;
+    repos.add(gitInfo);
 
-      final String targetPath = path.join(ownerdir.path, gitInfo["name"]);
+    lock["repos"] = repos.toList(growable: true);
 
-      Directory targetDir = await ensuredir(targetPath);
-
-      await targetDir.delete(recursive: true);
-
-      await new Directory(path.normalize(
-        path.join(temp.absolute.path, gitInfo["name"]))
-      ).rename(targetPath);
-
-      Log.success('clone in $targetDir');
-
-      var lock = await readJson(config.LOCK);
-
-      Set repos = new Set.from(lock["repos"] ? lock["repos"] : []);
-
-      gitInfo["path"] = targetPath;
-      repos.add(gitInfo);
-
-      lock["repos"] = repos.toList(growable: true);
-
-      await writeJson(config.LOCK, lock);
-    } catch (exception, stackTrace) {
-      print(exception);
-      print(stackTrace);
-    } finally {
-      await temp.delete(recursive: true);
-    }
+    await writeJson(config.LOCK, lock);
+  } catch (exception, stackTrace) {
+    print(exception);
+    print(stackTrace);
+  } finally {
+    await temp.delete(recursive: true);
   }
 }

@@ -7,7 +7,7 @@ import 'package:log/log.dart';
 
 import 'package:gpmx/config.dart' as config;
 import 'package:gpmx/utils.dart' show isGitRepoDir;
-import 'package:gpmx/git-dir-config.dart' show gitDirParse;
+import 'package:gpmx/git_dir_config.dart' show gitDirParse;
 import 'package:git_url_parse/git-url-parse.dart' show gitUrlParse;
 
 Future _importOneDir(String dirPath) async {

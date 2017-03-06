@@ -6,7 +6,7 @@ import 'package:log/log.dart';
 
 import '../config.dart' as config;
 import '../utils.dart' show readdir, isGitRepoDir, readJson, writeJson;
-import '../git-dir-config.dart' show gitDirParse;
+import '../git_dir_config.dart' show gitDirParse;
 import 'package:git_url_parse/git-url-parse.dart' show gitUrlParse;
 
 Future relinkHandler(Map argv, Map options) async {

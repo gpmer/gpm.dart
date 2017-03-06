@@ -26,31 +26,45 @@ Future bootstrap(List<String> arguments) async {
     });
 
   program
-    .command('list', 'display the all repo.')
+    .command('list')
+    .alias('ls')
+    .description('display the all repo.')
     .action(listHandler);
 
   program
-    .command('add <repo>', 'clone repo into local dir.')
+    .command('add <repo>',)
+    .alias('ad')
+    .description('clone repo into local dir.')
     .action(addHandler);
 
   program
-    .command('remove', 'remove a repo.')
+    .command('remove')
+    .alias('rm')
+    .description('remove a repo.')
     .action(removeHandler);
 
   program
-    .command('clean', 'clean the temp/cache.')
+    .command('clean')
+    .alias('cl')
+    .description('clean the temp/cache.')
     .action(cleanHandler);
 
   program
-    .command('runtime', 'print the program runtime, useful for submit a issue.')
+    .command('runtime')
+    .alias('rt')
+    .description('print the program runtime, useful for submit a issue.')
     .action(runtimeHandler);
 
   program
-    .command('relink', 'relink the base dir which contain repositories if you delete repository manually.')
+    .command('relink')
+    .description('relink the base dir which contain repositories if you delete repository manually.')
+    .alias('rl')
     .action(relinkHandler);
 
   program
-    .command('import <dir>', 'register a repository to GPM.')
+    .command('import <dir>')
+    .alias('ip')
+    .description('register a repository to GPM.')
     .option('--all', 'import all the repositories in the current directory into GPM')
     .option('--hard', 'import the repository in hard mode, it will move the repository into GPM container not just link')
     .option("-f, --force", "forced import, that mean you don't care the replace the old dir or not, just do it.")

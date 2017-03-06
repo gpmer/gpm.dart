@@ -19,6 +19,7 @@ Future bootstrap(List<String> arguments) async {
   await prepare();
   program
     ..name('gpmx')
+    ..version('0.0.2')
     ..description('Git Package Manager, make you manage the repository easier, Power by Dart')
     ..usage('<command> [options]')
     ..action((Map argv, Map options) {

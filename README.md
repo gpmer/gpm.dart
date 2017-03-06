@@ -35,23 +35,22 @@ gpmx -h
 
 # print out
 
-Git Package Manager, make you manage the repository easier.
+  Usage: gpmx <command> [options]
 
-Usage: gpmx <command> [arguments]
+    Git Package Manager, make you manage the repository easier, Power by Dart
 
-Global options:
--h, --help    Print this usage information.
+  Commands:
+    list              display the all repo.
+    add <repo>        clone repo into local dir.
+    remove            remove a repo.
+    clean             clean the temp/cache.
+    runtime           print the program runtime, useful for submit a issue.
+    relink            relink the base dir which contain repositories if you delete repository manually.
+    import <dir>      register a repository to GPM.
 
-Available commands:
-  add       clone repo into local dir.
-  clean     clean the temp/cache.
-  help      Display help information for gpmx.
-  list      display the all repo.
-  relink    relink the base dir which contain repositories if you delete repository manually.
-  remove    remove a repo.
-  runtime   print the program runtime, useful for submit a issue.
-
-Run "gpmx help <command>" for more information about a command.
+  Options:
+    -V, --version      print the current version
+    -h, --help         print the help info about 
 
 ```
 
